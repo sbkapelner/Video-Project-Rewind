@@ -1,0 +1,17 @@
+{
+  "name": "git-electron-app",
+  "version": "1.0.0",
+  "productName": "simple-git",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "electron ."
+  },
+  "keywords": [],
+  "author": "Sarah Kapelner",
+  "license": "ISC",
+  "description": "A simple UI for selecyt git commands.",
+  "dependencies": {
+    "electron": "^32.1.2"
+  }
+}

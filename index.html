@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Git Electron App</title>
+
+  <style>
+    #log-box,
+    #branch-box {
+      width: 100%;
+      height: 150px;
+      border: 1px solid black;
+      margin-bottom: 10px;
+      overflow-y: scroll;
+      user-select: text;
+    }
+
+    button {
+      margin: 5px;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Git Repository Manager</h1>
+  <button id="open-directory">Open Git Repo</button>
+  <div id="git-info">
+    <h2>Git Log</h2>
+    <select id="log-box"></select>
+    <button id="refresh-log">Refresh Log</button>
+    <button id="checkout-commit">Checkout Selected Commit</button>
+
+    <h2>Git Branches</h2>
+    <select id="branch-box"></select>
+    <button id="checkout-branch">Checkout Selected Branch</button>
+
+    <button id="previous-commit">Go to Previous Commit</button>
+  </div>
+
+  <script src="render.js"></script>
+</body>
+
+</html>

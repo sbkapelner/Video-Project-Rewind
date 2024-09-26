@@ -1,5 +1,5 @@
 {
-  "name": "git-electron-app",
+  "name": "simple-git",
   "version": "1.0.0",
   "productName": "simple-git",
   "main": "main.js",
@@ -10,7 +10,7 @@
   "keywords": [],
   "author": "Sarah Kapelner",
   "license": "ISC",
-  "description": "A simple UI for selecyt git commands.",
+  "description": "A simple UI for select git commands.",
   "dependencies": {
     "electron": "^32.1.2"
   }

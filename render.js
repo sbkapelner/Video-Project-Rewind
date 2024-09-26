@@ -93,3 +93,22 @@ previousCommitButton.addEventListener("click", async () => {
   alert(`Checked out to previous commit ${previousCommit}`);
   loadGitLog();
 });
+
+// Create repo button
+const createRepoButton = document.getElementById("create-repo");
+createRepoButton.addEventListener("click", async () => {
+  const result = await ipcRenderer.invoke("open-create-repo-dialog");
+
+  if (!result.canceled) {
+    const newRepoPath = result.filePaths[0];
+    try {
+      await ipcRenderer.invoke("git-command", `git init`, newRepoPath); // Initialize the repo
+      alert(`Git repository created at: ${newRepoPath}`);
+      // You might want to automatically open the newly created repo:
+      repoPath = newRepoPath;
+      loadGitLog();
+    } catch (error) {
+      alert(`Error creating repository: ${error}`);
+    }
+  }
+});

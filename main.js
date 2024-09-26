@@ -36,6 +36,14 @@ ipcMain.handle("open-directory", async (event) => {
   return null;
 });
 
+// Open directory to create repo
+ipcMain.handle("open-create-repo-dialog", async () => {
+  const result = await dialog.showOpenDialog({
+    properties: ["openDirectory", "createDirectory"],
+  });
+  return result; // Return the dialog result to the renderer process
+});
+
 // Execute a git command
 ipcMain.handle("git-command", async (event, command, repoPath) => {
   return new Promise((resolve, reject) => {

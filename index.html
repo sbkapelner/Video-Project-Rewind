@@ -5,16 +5,29 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Git Electron App</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0NwE+tPdnvdfvt8BEocPIxOAYcHA" crossorigin="anonymous">
 
   <style>
-    #log-box,
-    #branch-box {
+    #log-box {
       width: 100%;
       height: 150px;
       border: 1px solid black;
       margin-bottom: 10px;
       overflow-y: scroll;
       user-select: text;
+    }
+
+    .list-item {
+      /* Style for each commit/branch item */
+      padding: 5px;
+      cursor: pointer;
+      /* Indicate that items are clickable */
+    }
+
+    .list-item.selected {
+      /* Style for selected items */
+      background-color: lightblue;
     }
 
     button {
@@ -28,16 +41,15 @@
   <button id="open-directory">Open Git Repo</button>
   <div id="git-info">
     <h2>Git Log</h2>
-    <select id="log-box"></select>
-    <button id="refresh-log">Refresh Log</button>
+    <div id="log-box"></div> <button id="refresh-log">Refresh Log</button>
     <button id="checkout-commit">Checkout Selected Commit</button>
-
-    <h2>Git Branches</h2>
-    <select id="branch-box"></select>
-    <button id="checkout-branch">Checkout Selected Branch</button>
 
     <button id="previous-commit">Go to Previous Commit</button>
   </div>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+    integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPh6uKrtl/vMf8iJBGW8hT7fEMkQ9H/qKkPp" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"
+    integrity="sha384-fbbOQedDUMZZ+AU/Y5KkunnVxytYz3wp3rxlQewAR/mbzdo8a5AJNyJbwz9B483" crossorigin="anonymous"></script>
 
   <script src="render.js"></script>
 </body>

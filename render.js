@@ -1,15 +1,25 @@
 const { ipcRenderer } = require("electron");
 
 let repoPath = null;
-
-// Selectors
 const openDirectoryButton = document.getElementById("open-directory");
 const logBox = document.getElementById("log-box");
-const branchBox = document.getElementById("branch-box");
 const refreshLogButton = document.getElementById("refresh-log");
 const checkoutCommitButton = document.getElementById("checkout-commit");
-const checkoutBranchButton = document.getElementById("checkout-branch");
 const previousCommitButton = document.getElementById("previous-commit");
+
+// Function to handle item selection
+function handleItemClick(event, boxId) {
+  const selectedItem = event.target;
+  // Remove 'selected' class from previously selected items
+  const box = document.getElementById(boxId);
+  const previousSelected = box.querySelector(".selected");
+  if (previousSelected) {
+    previousSelected.classList.remove("selected");
+  }
+
+  // Add 'selected' class to the clicked item
+  selectedItem.classList.add("selected");
+}
 
 // Open directory
 openDirectoryButton.addEventListener("click", async () => {
@@ -31,42 +41,17 @@ async function loadGitLog() {
     repoPath
   );
 
-  // Clear previous log entries
-  logBox.innerHTML = "";
+  logBox.innerHTML = ""; // Clear previous entries
 
-  // Populate the log box with options
   log.split("\n").forEach((commit) => {
     if (commit.trim() !== "") {
-      // Avoid empty lines
-      const option = document.createElement("option");
-      option.value = commit.split(" ")[0]; // Use commit hash as value
-      option.text = commit;
-      logBox.appendChild(option);
-    }
-  });
-}
-
-// Load branches
-async function loadBranches() {
-  if (!repoPath) return;
-  const branches = await ipcRenderer.invoke(
-    "git-command",
-    "git branch",
-    repoPath
-  );
-
-  // Clear previous branch entries
-  branchBox.innerHTML = "";
-
-  // Populate the branch box with options
-  branches.split("\n").forEach((branch) => {
-    const branchName = branch.trim();
-    if (branchName !== "") {
-      // Avoid empty lines
-      const option = document.createElement("option");
-      option.value = branchName;
-      option.text = branchName;
-      branchBox.appendChild(option);
+      const commitDiv = document.createElement("div");
+      commitDiv.textContent = commit;
+      commitDiv.classList.add("list-item");
+      commitDiv.addEventListener("click", (event) =>
+        handleItemClick(event, "log-box")
+      );
+      logBox.appendChild(commitDiv);
     }
   });
 }
@@ -76,29 +61,18 @@ refreshLogButton.addEventListener("click", loadGitLog);
 
 // Checkout a commit
 checkoutCommitButton.addEventListener("click", async () => {
-  const selectedCommit = logBox.value; // Get the selected option's value
-  if (selectedCommit) {
+  const selectedCommitEl = logBox.querySelector(".selected");
+  if (selectedCommitEl) {
+    const selectedCommit = selectedCommitEl.textContent.split(" ")[0]; // Get commit hash
     await ipcRenderer.invoke(
       "git-command",
-      `git checkout -f ${selectedCommit}`, // No need to split anymore
+      `git checkout -f ${selectedCommit}`,
       repoPath
     );
     alert(`Checked out to commit ${selectedCommit}`);
-    loadGitLog();
-  }
-});
-
-// Checkout a branch
-checkoutBranchButton.addEventListener("click", async () => {
-  const selectedBranch = branchBox.value; // Get the selected option's value
-  if (selectedBranch) {
-    await ipcRenderer.invoke(
-      "git-command",
-      `git checkout -f ${selectedBranch.trim()}`,
-      repoPath
-    );
-    alert(`Checked out to branch ${selectedBranch}`);
-    loadBranches();
+    loadGitLog(); // Refresh the log to reflect the checkout
+  } else {
+    alert("Please select a commit to checkout.");
   }
 });
 
@@ -110,7 +84,6 @@ previousCommitButton.addEventListener("click", async () => {
     repoPath
   );
   const commits = log.split("\n");
-  const currentCommit = commits[0].split(" ")[0]; // First commit is the current one
   const previousCommit = commits[1].split(" ")[0]; // Second commit is the previous one
   await ipcRenderer.invoke(
     "git-command",
@@ -120,15 +93,3 @@ previousCommitButton.addEventListener("click", async () => {
   alert(`Checked out to previous commit ${previousCommit}`);
   loadGitLog();
 });
-
-// Get selected text in the log or branch box
-function getSelectedText(box) {
-  const selection = window.getSelection();
-  if (
-    selection.rangeCount > 0 &&
-    selection.getRangeAt(0).commonAncestorContainer.parentElement === box
-  ) {
-    return selection.toString();
-  }
-  return null;
-}

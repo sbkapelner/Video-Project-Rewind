@@ -48,7 +48,7 @@
   <h1>Simple Git</h1>
   <button id="open-directory">Open Git Repo</button>
   <div id="git-info">
-    <h2>Commits</h2>
+    <h2>Existing Commits</h2>
     <div id="log-box"></div> <button id="refresh-log">Refresh Log</button>
     <button id="checkout-commit">Checkout Selected Commit</button>
 
@@ -56,6 +56,11 @@
 
     <button id="create-repo">Create New Repo</button>
 
+  </div>
+  <h2>New Commit</h2>
+  <div id="new-commits">
+    <input type="text" id="commit-message" placeholder="Enter commit message">
+    <button id="commit-button">Commit</button>
   </div>
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
     integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPh6uKrtl/vMf8iJBGW8hT7fEMkQ9H/qKkPp" crossorigin="anonymous"></script>

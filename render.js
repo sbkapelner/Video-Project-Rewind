@@ -84,13 +84,9 @@ previousCommitButton.addEventListener("click", async () => {
     repoPath
   );
   const commits = log.split("\n");
-  const previousCommit = commits[1].split(" ")[0]; // Second commit is the previous one
-  await ipcRenderer.invoke(
-    "git-command",
-    `git checkout -f ${previousCommit}`,
-    repoPath
-  );
-  alert(`Checked out to previous commit ${previousCommit}`);
+  const previousCommit = commits[0].split(" ")[0]; // Second commit is the previous one
+  await ipcRenderer.invoke("git-command", `git reset --hard`, repoPath);
+  alert(`Reverted to ${previousCommit}`);
   loadGitLog();
 });
 
@@ -110,5 +106,32 @@ createRepoButton.addEventListener("click", async () => {
     } catch (error) {
       alert(`Error creating repository: ${error}`);
     }
+  }
+});
+
+//New commit button
+const commitMessageInput = document.getElementById("commit-message");
+const commitButton = document.getElementById("commit-button");
+
+commitButton.addEventListener("click", async () => {
+  const commitMessage = commitMessageInput.value.trim();
+
+  if (commitMessage === "") {
+    alert("Please enter a commit message.");
+    return;
+  }
+
+  try {
+    await ipcRenderer.invoke("git-command", "git add .", repoPath);
+    await ipcRenderer.invoke(
+      "git-command",
+      `git stash && git checkout main && git stash pop && git add . && git commit -m "${commitMessage}"`,
+      repoPath
+    );
+    alert(`Committed changes with message: "${commitMessage}"`);
+    loadGitLog(); // Refresh the log to show the new commit
+    commitMessageInput.value = ""; // Clear the input field
+  } catch (error) {
+    alert(`Error committing changes: ${error}`);
   }
 });

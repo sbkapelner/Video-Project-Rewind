@@ -21,6 +21,25 @@ function handleItemClick(event, boxId) {
   selectedItem.classList.add("selected");
 }
 
+const currentCommitTextbox = document.getElementById("current-commit");
+
+// Function to update the current commit text box
+async function updateCurrentCommit() {
+  if (!repoPath) return;
+
+  try {
+    const currentCommit = await ipcRenderer.invoke(
+      "git-command",
+      "git rev-parse HEAD", // Get the current commit ID
+      repoPath
+    );
+    currentCommitTextbox.textContent = currentCommit.trim().substring(0, 7);
+  } catch (error) {
+    currentCommitTextbox.value = "Error getting commit ID";
+    console.error("Error getting current commit:", error);
+  }
+}
+
 // Open directory
 openDirectoryButton.addEventListener("click", async () => {
   repoPath = await ipcRenderer.invoke("open-directory");
@@ -28,7 +47,7 @@ openDirectoryButton.addEventListener("click", async () => {
     alert("Selected directory is not a Git repository");
   } else if (repoPath) {
     loadGitLog();
-    loadBranches();
+    updateCurrentCommit();
   }
 });
 
@@ -54,6 +73,7 @@ async function loadGitLog() {
       logBox.appendChild(commitDiv);
     }
   });
+  updateCurrentCommit();
 }
 
 // Refresh log
@@ -71,6 +91,7 @@ checkoutCommitButton.addEventListener("click", async () => {
     );
     alert(`Checked out to commit ${selectedCommit}`);
     loadGitLog(); // Refresh the log to reflect the checkout
+    updateCurrentCommit();
   } else {
     alert("Please select a commit to checkout.");
   }
@@ -88,6 +109,7 @@ previousCommitButton.addEventListener("click", async () => {
   await ipcRenderer.invoke("git-command", `git reset --hard`, repoPath);
   alert(`Reverted to ${previousCommit}`);
   loadGitLog();
+  updateCurrentCommit();
 });
 
 // Create repo button
@@ -131,6 +153,7 @@ commitButton.addEventListener("click", async () => {
     alert(`Committed changes with message: "${commitMessage}"`);
     loadGitLog(); // Refresh the log to show the new commit
     commitMessageInput.value = ""; // Clear the input field
+    updateCurrentCommit();
   } catch (error) {
     alert(`Error committing changes: ${error}`);
   }

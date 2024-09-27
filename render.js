@@ -1,4 +1,6 @@
 const { ipcRenderer } = require("electron");
+const { exec } = require("child_process");
+const { dialog } = require("electron");
 
 let repoPath = null;
 const openDirectoryButton = document.getElementById("open-directory");
@@ -6,6 +8,53 @@ const logBox = document.getElementById("log-box");
 const refreshLogButton = document.getElementById("refresh-log");
 const checkoutCommitButton = document.getElementById("checkout-commit");
 const previousCommitButton = document.getElementById("previous-commit");
+
+//Function to check if git is installed
+function checkGitInstalled() {
+  exec("git --version", (error, stdout, stderr) => {
+    if (error) {
+      console.log("Git is not installed.");
+      dialog
+        .showMessageBox({
+          type: "warning",
+          buttons: ["Install Git", "Cancel"],
+          title: "Git Not Found",
+          message:
+            "Git is required to use this application. Do you want to install Git?",
+        })
+        .then((response) => {
+          if (response.response === 0) {
+            // User clicked 'Install Git'
+            installGit();
+          }
+        });
+    } else {
+      console.log("Git is installed: " + stdout);
+    }
+  });
+}
+
+//Function to install git
+function installGit() {
+  // For Windows, you can trigger the Git installer
+  if (process.platform === "win32") {
+    alert("Download Git at https://git-scm.com/downloads");
+  }
+
+  // For macOS
+  if (process.platform === "darwin") {
+    exec("xcode-select --install", (error) => {
+      if (error) {
+        console.log("Failed to install Git via xcode command line tools");
+        alert(
+          "Faild to install Git. Visit https://git-scm.com/downloads/mac to download Git manually."
+        );
+      }
+    });
+  }
+}
+
+checkGitInstalled();
 
 // Function to handle item selection
 function handleItemClick(event, boxId) {

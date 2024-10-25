@@ -1,10 +1,10 @@
 # Video Project Rewind (Recovery System for CapCut)
 
 # Usage
-## Mac:
+**Mac:**
 npm run dist-mac
 
-## Windows:
+**Windows:**
 npm run dist-win
 
 ##

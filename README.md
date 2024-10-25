@@ -1,5 +1,4 @@
-# Video Project Rewind
-Recover system for CapCut
+# Video Project Rewind (Recovery System for CapCut)
 
 # Usage
 ## Mac:

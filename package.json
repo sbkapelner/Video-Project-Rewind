@@ -1,0 +1,45 @@
+{
+  "name": "video-project-rewind",
+  "version": "1.0.0",
+  "productName": "video-project-rewind",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "electron .",
+    "dist": "electron-builder",
+    "dist-mac": "electron-builder --mac",
+    "dist-win": "electron-builder --win"
+  },
+  "keywords": [],
+  "author": "Sarah Kapelner",
+  "license": "ISC",
+  "description": "A simple UI for select git commands.",
+  "devDependencies": {
+    "electron-builder": "^25.0.5",
+    "electron": "^32.1.2"
+  },
+  "build": {
+    "appId": "com.example.video-project-rewind",
+    "productName": "Video Project Rewind",
+    "directories": {
+      "output": "dist"
+    },
+  
+  "files": [
+    "main.js",
+    "index.html",
+    "render.js",
+    "package.json",
+    "assets/**/*",
+    "node_modules/**/*"
+  ],
+  "mac": {
+    "category": "public.app-category.developer-tools",
+    "target": ["dmg", "zip"],
+    "icon": "assets/icons/macicon.icns"
+  },
+  "win": {
+    "target": ["nsis", "portable"]
+  }
+}
+}

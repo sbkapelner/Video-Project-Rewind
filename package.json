@@ -14,15 +14,13 @@
   "author": "Sarah Kapelner",
   "license": "ISC",
   "description": "A simple UI for select git commands.",
-  "dependencies": {
-    "electron": "^32.1.2"
-  },
   "devDependencies": {
-    "electron-builder": "^25.0.5"
+    "electron-builder": "^25.0.5",
+    "electron": "^32.1.2"
   },
   "build": {
     "appId": "com.example.video-project-rewind",
-    "productName": "Git Electron App",
+    "productName": "Video Project Rewind",
     "directories": {
       "output": "dist"
     },
@@ -41,8 +39,7 @@
     "icon": "assets/icons/macicon.icns"
   },
   "win": {
-    "target": ["nsis", "portable"],
-    "icon": "assets/icons/winicon.ico"
+    "target": ["nsis", "portable"]
   }
 }
 }

@@ -5,6 +5,22 @@ const fs = require("fs");
 
 let mainWindow;
 
+function checkGitInstalled() {
+  return new Promise((resolve, reject) => {
+    exec('git --version', (error) => {
+      if (error) {
+        dialog.showErrorBox(
+          'Git Not Found',
+          'Git is not installed or not accessible. Please install Git to use this application.'
+        );
+        app.quit();
+        resolve(false);
+      }
+      resolve(true);
+    });
+  });
+}
+
 function createWindow() {
   mainWindow = new BrowserWindow({
     width: 800,
@@ -19,7 +35,10 @@ function createWindow() {
   mainWindow.loadFile("index.html");
 }
 
-app.on("ready", createWindow);
+app.on("ready", async () => {
+  await checkGitInstalled();
+  createWindow();
+});
 
 // Open a directory and ensure it’s a git repository
 ipcMain.handle("open-directory", async (event) => {

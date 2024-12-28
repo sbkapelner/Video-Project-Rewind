@@ -1,7 +1,7 @@
 # Video Project Rewind
 This is a simple UI for select git commands. It can be used as a recovery system for CapCut.
 
-##Installation
+## Installation
 WIN: npm run dist-win
 MAC: npm run dist-mac
 
